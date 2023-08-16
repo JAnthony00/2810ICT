@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class TableData:
     def __init__(self, fileName):
@@ -24,6 +25,23 @@ class TableData:
 
         return selectedData
 
+    def getAverageDataHour(self):
+
+        # make averaged hour within filtered time dataframe
+        self.data = self.getSelectedDateData(startDate, endDate)
+
+        # get the totals for each hour an accident happens in that time
+        entryCounts = {}
+
+        for entry in self.data['ACCIDENT_TIME']:
+            if entry in entryCounts:
+                entryCounts[entry] += 1
+            else:
+                entryCounts[entry] = 1
+
+        return entryCounts
+
+
     def getSelectedType(self, accidentType):
         # --- for a user selected period, retrieve all accidents caused by a type containing a keyword ---
 
@@ -41,7 +59,7 @@ class TableData:
         return searchAlcohol
 
 # create an instance of the TableData
-table = TableData('WorkableStats.csv')
+table = TableData('Stats.csv')
 
 # data for selected range -- this data will be received from UI selection
 startDate = '1/07/2013'
@@ -49,9 +67,19 @@ endDate = '7/07/2013'
 
 # data for selected accident type -- this will be user entered from UI
 accidentType = 'Struck Pedestrian'
-hasAlcohol = 'No'
+hasAlcohol = 'Yes'
 
 
 print("Table Data: ")
-print(table.getSelectedType(accidentType))
+# print(table.getSelectedType(accidentType))
+print(table.getAlcoholInvolved(hasAlcohol))
 
+
+
+# number of accidents - each hour of the day for a selected period
+plotData = table.getSelectedDateData(startDate, endDate)
+plt.scatter(plotData['ACCIDENT_DATE'], plotData['ACCIDENT_TIME'])
+plt.xlabel('Accident Date')
+plt.ylabel('Accident Hour')
+plt.title('Accidents per Hour')
+plt.show()
