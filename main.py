@@ -10,6 +10,8 @@ class TableData:
         return self.data
 
     def getSelectedDateData(self, startDate, endDate):
+        # --- for a user selected period, display the information of all accidents that happened in the period ---
+
         # define the date range
         searchStart = pd.to_datetime(startDate, format= '%d/%m/%Y') # format the data into d/m/y because americans
         searchEnd = pd.to_datetime(endDate, format= '%d/%m/%Y')
@@ -22,20 +24,34 @@ class TableData:
 
         return selectedData
 
+    def getSelectedType(self, accidentType):
+        # --- for a user selected period, retrieve all accidents caused by a type containing a keyword ---
 
+        # make the searched data the filtered time dataframe
+        self.data = self.getSelectedDateData(startDate, endDate)
 
+        # selected data looks for 'Yes' or 'No' in any casings
+        searchType = self.data[self.data['ACCIDENT_TYPE'].str.lower().str.contains(accidentType.lower())]
 
+        return searchType
 
+    def getAlcoholInvolved(self, hasAlcohol): # get data where alcohol was involved in the accident
+        searchAlcohol = self.data[self.data['ALCOHOLTIME'].str.lower().str.contains(hasAlcohol.lower())]
+
+        return searchAlcohol
 
 # create an instance of the TableData
-table = TableData('Stats.csv')
+table = TableData('WorkableStats.csv')
 
 # data for selected range -- this data will be received from UI selection
-startDate = '3/07/2013'
-endDate = '4/07/2013'
+startDate = '1/07/2013'
+endDate = '7/07/2013'
 
-# get all the data
+# data for selected accident type -- this will be user entered from UI
+accidentType = 'Struck Pedestrian'
+hasAlcohol = 'No'
+
+
 print("Table Data: ")
-print(table.getSelectedDateData(startDate, endDate))
-print()
+print(table.getSelectedType(accidentType))
 
