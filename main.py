@@ -1,3 +1,16 @@
+"""
+For a user selected period, display the information of all accidents that happened in that period.
+
+For a user selected period, produce a chart to show the number of accidents in each hour of the day (on average).
+
+For a user selected period, retrieve all accidents caused by an accident type that contains a keyword (user entered)
+e.g. collision, pedestrian, etc.
+
+Allow the user to analyze the impact of alcohol in accidents - ie: trends over time, accident types involving alcohol.
+
+One other "Insight" of your choice.
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -73,13 +86,3 @@ hasAlcohol = 'Yes'
 print("Table Data: ")
 # print(table.getSelectedType(accidentType))
 print(table.getAlcoholInvolved(hasAlcohol))
-
-
-
-# number of accidents - each hour of the day for a selected period
-plotData = table.getSelectedDateData(startDate, endDate)
-plt.scatter(plotData['ACCIDENT_DATE'], plotData['ACCIDENT_TIME'])
-plt.xlabel('Accident Date')
-plt.ylabel('Accident Hour')
-plt.title('Accidents per Hour')
-plt.show()
